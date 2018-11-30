@@ -7,7 +7,7 @@ import {
 } from '@phosphor/widgets';
 
 import {
-  ICommandPalette, InstanceTracker
+  ICommandPalette, InstanceTracker, IInstanceTracker
 } from '@jupyterlab/apputils';
 
 import {
@@ -21,6 +21,14 @@ import {
 import {
   ILauncher
 } from '@jupyterlab/launcher';
+
+//import {
+//  IMainMenu
+//} from '@jupyterlab/mainmenu';
+
+import {
+  Token
+} from '@phosphor/coreutils';
 
 import '../style/index.css';
 
@@ -49,6 +57,9 @@ class X11vncWidget extends Widget {
   }
 }
 
+interface IX11vncTracker extends IInstanceTracker<X11vncWidget> {};
+export const IX11vncTracker = new Token<IX11vncTracker>('x11vnc/tracker');
+
 /**
  * Acticate X11 VNC Widget
  */
@@ -56,8 +67,9 @@ function activate(
   app: JupyterLab,
   palette: ICommandPalette,
   restorer: ILayoutRestorer,
+  //menu:     IMainMenu,
   launcher: ILauncher | null
-) {
+) : IX11vncTracker {
   console.log('JupyterLab extension jupyterlab-vnc is activated!');
   // Create X11 VNC Widget
   let x11vncWidget: X11vncWidget;
@@ -65,7 +77,7 @@ function activate(
   // Add an application command
   const command: string = 'x11vnc:open';
   app.commands.addCommand(command, {
-      label: 'Open',
+      label: 'Open Desktop',
       execute: () => {
         if (!x11vncWidget) {
           x11vncWidget = new X11vncWidget();
@@ -100,24 +112,34 @@ function activate(
     });
   }
 
+  //if (menu) {
+  //  menu.fileMenu.addGroup([{ command: command }], 40);
+  //}
+
   // Track and restore the X11 VNC Widget State
-  let tracker = new InstanceTracker<Widget>({ namespace: 'x11vnc' });
+  let tracker = new InstanceTracker<X11vncWidget>({ namespace: 'x11vnc' });
   restorer.restore(tracker, {
-    command,
+    command: command,
     args: () => JSONExt.emptyObject,
     name: () => 'x11vnc'
   });
+
+  return tracker;
 }
 
 
 /**
  * Initialization data for the jupyterlab-vnc extension.
  */
-const extension: JupyterLabPlugin<void> = {
+const extension: JupyterLabPlugin<IX11vncTracker> = {
   id: 'jupyterlab-vnc',
   autoStart: true,
+  //requires: [ICommandPalette, ILayoutRestorer, IMainMenu],
   requires: [ICommandPalette, ILayoutRestorer],
+  optional: [ILauncher],
+  provides: IX11vncTracker,
   activate: activate
 };
 
 export default extension;
+
