@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo start-stop-daemon --start --quiet --startas /usr/bin/supervisord --pidfile /var/run/supervisord.pid -- -c /etc/supervisor/supervisord.conf
