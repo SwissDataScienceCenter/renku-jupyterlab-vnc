@@ -22,9 +22,9 @@ import {
   ILauncher
 } from '@jupyterlab/launcher';
 
-//import {
-//  IMainMenu
-//} from '@jupyterlab/mainmenu';
+import {
+  IMainMenu
+} from '@jupyterlab/mainmenu';
 
 import {
   Token
@@ -67,9 +67,9 @@ function activate(
   app: JupyterLab,
   palette: ICommandPalette,
   restorer: ILayoutRestorer,
-  //menu:     IMainMenu,
+  menu: IMainMenu,
   launcher: ILauncher | null
-) : IX11vncTracker {
+) : Promise<IX11vncTracker> {
   console.log('JupyterLab extension jupyterlab-vnc is activated!');
   // Create X11 VNC Widget
   let x11vncWidget: X11vncWidget;
@@ -112,9 +112,10 @@ function activate(
     });
   }
 
-  //if (menu) {
-  //  menu.fileMenu.addGroup([{ command: command }], 40);
-  //}
+  // Add the command to the main menu
+  if (menu) {
+    menu.fileMenu.addGroup([{ command: command }], 40);
+  }
 
   // Track and restore the X11 VNC Widget State
   let tracker = new InstanceTracker<X11vncWidget>({ namespace: 'x11vnc' });
@@ -124,7 +125,7 @@ function activate(
     name: () => 'x11vnc'
   });
 
-  return tracker;
+  return Promise.resolve(tracker);
 }
 
 
@@ -134,8 +135,7 @@ function activate(
 const extension: JupyterLabPlugin<IX11vncTracker> = {
   id: 'jupyterlab-vnc',
   autoStart: true,
-  //requires: [ICommandPalette, ILayoutRestorer, IMainMenu],
-  requires: [ICommandPalette, ILayoutRestorer],
+  requires: [ICommandPalette, ILayoutRestorer, IMainMenu],
   optional: [ILauncher],
   provides: IX11vncTracker,
   activate: activate
