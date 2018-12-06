@@ -1,6 +1,10 @@
 # renku-jupyterlab-vnc
 
-A JupyterLab extension for VNC
+A JupyterLab extension for VNC.
+
+This extension will not work as a standalone. 
+
+It is designed to be installed in the Docker image created by docker/Dockerfile.
 
 
 ## Prerequisites
@@ -9,8 +13,10 @@ A JupyterLab extension for VNC
 
 ## Installation
 
+In ./docker/Dockerfile
+
 ```bash
-jupyter labextension install renku-jupyterlab-vnc
+jupyter labextension install @renku/jupyterlab-vnc
 ```
 
 ## Development
