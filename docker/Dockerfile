@@ -1,4 +1,4 @@
-FROM renku/singleuser:0.2.0
+FROM renku/singleuser:0.3.2
 
 RUN    sudo apt update \
     && sudo DEBIAN_FRONTEND=noninteractive apt install -y \
@@ -21,7 +21,8 @@ RUN    sudo git clone https://github.com/novnc/noVNC.git /opt/novnc \
     && sudo rm -rf /tmp/*
 
 RUN    pip install nbserverproxy \
-    && jupyter serverextension enable --py nbserverproxy
+    && jupyter serverextension enable --py nbserverproxy \
+    && jupyter labextension install @renku/jupyterlab-vnc
 
 ENV DISPLAY :1
 
