@@ -7,11 +7,20 @@ import {
 //} from '@phosphor/widgets';
 
 import {
-  ICommandPalette, InstanceTracker, IInstanceTracker, IFrame
+  ICommandPalette,
+  InstanceTracker,
+  IInstanceTracker,
+  IFrame
 } from '@jupyterlab/apputils';
 
 import {
-  JSONExt
+  ISettingRegistry
+} from '@jupyterlab/coreutils';
+
+import {
+  JSONExt,
+  JSONObject,
+  Token
 } from '@phosphor/coreutils'
 
 import {
@@ -25,10 +34,6 @@ import {
 import {
   IMainMenu
 } from '@jupyterlab/mainmenu';
-
-import {
-  Token
-} from '@phosphor/coreutils';
 
 import '../style/index.css';
 
@@ -45,12 +50,16 @@ class X11vncWidget extends IFrame {
      this.addClass('jp-vncWidget'); 
   }
 
+  setUrl(url: string) : void {
+     this.url = url ;
+  }
+
   onUpdateRequest(msg : Message) {
   }
 }
 
 interface IX11vncTracker extends IInstanceTracker<X11vncWidget> {};
-export const IX11vncTracker = new Token<IX11vncTracker>('@renku/x11vnc:Widget');
+export const IX11vncTracker = new Token<IX11vncTracker>('@renku/jupyterlab-vnc:plugin');
 
 /**
  * Acticate X11 VNC Widget
@@ -60,9 +69,11 @@ function activate(
   palette: ICommandPalette,
   restorer: ILayoutRestorer,
   menu: IMainMenu,
+  settingRegistry: ISettingRegistry,
   launcher: ILauncher | null
 ) : Promise<IX11vncTracker> {
   console.log('JupyterLab extension jupyterlab-vnc is activated!');
+  const id = extension.id;
   // Create X11 VNC Widget
   let x11vncWidget: X11vncWidget;
 
@@ -117,6 +128,27 @@ function activate(
     name: () => 'x11vnc'
   });
 
+  // Update settings
+  function updateSettings(settings: ISettingRegistry.ISettings): void {
+    let cached = settings.get('virtualDesktopConfig').composite as JSONObject;
+    Private.setUrl(cached['url'] as string); 
+    if (x11vncWidget) {
+      x11vncWidget.setUrl(Private.getUrl());
+    }
+    console.log('Settings URL='+(cached['url'] as string));
+  }
+
+  // Load settings
+  Promise.all([
+    settingRegistry.load(id),
+    app.restored
+  ]).then(([settings]) => {
+    updateSettings(settings);
+    settings.changed.connect(updateSettings);
+  }).catch((reason: Error) => {
+    console.error(reason.message);
+  });
+
   return Promise.resolve(tracker);
 }
 
@@ -125,9 +157,9 @@ function activate(
  * Initialization data for the jupyterlab-vnc extension.
  */
 const extension: JupyterLabPlugin<IX11vncTracker> = {
-  id: 'jupyterlab-vnc',
+  id: '@renku/jupyterlab-vnc:plugin',
   autoStart: true,
-  requires: [ICommandPalette, ILayoutRestorer, IMainMenu],
+  requires: [ICommandPalette, ILayoutRestorer, IMainMenu, ISettingRegistry],
   optional: [ILauncher],
   provides: IX11vncTracker,
   activate: activate
@@ -139,9 +171,13 @@ namespace Private {
    export function getUrl() : string {
      if (!VNC_URL) {
        //VNC_URL=src=process.env.JUPYTERHUB_SERVICE_PREFIX + '/proxy/6080/vnc_lite.html?path=' + process.env.JUPYTERHUB_SERVICE_PREFIX;
-       VNC_URL='https://www.epfl.ch';
+       VNC_URL='https://www.datascience.ch';
      }
      return VNC_URL;
+   }
+
+   export function setUrl(url : string) : void {
+     VNC_URL=url;
    }
 }
 

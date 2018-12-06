@@ -1,5 +1,5 @@
 {
-  "name": "renku-jupyterlab-vnc",
+  "name": "@renku/jupyterlab-vnc",
   "version": "0.1.0",
   "description": "A JupyterLab extension for VNC",
   "keywords": [
@@ -11,11 +11,12 @@
   "bugs": {
     "url": "https://github.com/SwissDataScienceCenter/renku-jupyterlab-vnc/issues"
   },
-  "license": "BSD-3-Clause",
-  "author": "Eric Bouillet",
+  "license": "Apache-2.0",
+  "author": "Swiss Data Science Center",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
-    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
+    "schema/*.json"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -43,6 +44,7 @@
     "typescript": "~3.1.1"
   },
   "jupyterlab": {
-    "extension": true
+    "extension": true,
+    "schemaDir": "schema"
   }
 }
