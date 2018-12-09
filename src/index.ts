@@ -170,8 +170,9 @@ namespace Private {
 
    export function getUrl() : string {
      if (!VNC_URL) {
-       //VNC_URL=src=process.env.JUPYTERHUB_SERVICE_PREFIX + '/proxy/6080/vnc_lite.html?path=' + process.env.JUPYTERHUB_SERVICE_PREFIX;
-       VNC_URL='https://www.datascience.ch';
+       let theUrl=window.location.pathname;
+       theUrl=theUrl.replace(/lab\/?$/,"");
+       VNC_URL=theUrl+'proxy/6080/vnc_lite.html?path='+theUrl+'proxy/6080';
      }
      return VNC_URL;
    }
