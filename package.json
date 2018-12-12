@@ -1,6 +1,6 @@
 {
   "name": "@renku/jupyterlab-vnc",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "A JupyterLab extension for VNC",
   "keywords": [
     "jupyter",

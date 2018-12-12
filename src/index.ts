@@ -178,7 +178,7 @@ namespace Private {
    }
 
    export function setUrl(url : string) : void {
-     VNC_URL=url;
+     //VNC_URL=url;
    }
 }
 
