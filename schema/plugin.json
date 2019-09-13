@@ -19,7 +19,7 @@
       "title": "VNC Url",
       "description": "Url of virtual desktop",
       "default": {
-        "url": "https://datascience.ch"
+        "url": ""
       }
     }
   },

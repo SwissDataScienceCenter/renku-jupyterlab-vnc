@@ -27,7 +27,7 @@ RUN    pip install nbserverproxy \
 ENV DISPLAY :1
 
 COPY --chown=root:root desktop.conf /etc/supervisor/conf.d/
-COPY --chown=root:root start-supervisord /usr/local/bin/start-notebook.d/start-supervisord
+COPY --chown=root:root start-supervisord.sh /usr/local/bin/start-notebook.d/start-supervisord.sh
 
 EXPOSE 8888
 
