@@ -2,25 +2,25 @@
 
 A JupyterLab extension for VNC.
 
-This extension will not work as a standalone.
+* This extension creates a menu, palette and a launcher for opening a VNC frame in a Jupyterlab tab. 
+* This extension will not work as a standalone, it is meant to be used with jupyterlab.
+* This extension does not provide a VNC server, which must be started independently.
 
-It is meant to be used in the Docker image created with [docker/Dockerfile](./docker/Dockerfile#L25).
-
-* This extension creates a menu, palette and a launcher for opening a VNC frame in a Jupyter tab. 
-* This extension does not provide a VNC server. The VNC server must be started by the docker container in which this extension is installed.
+The extension should be used with the Docker image built from [docker/Dockerfile](./docker/Dockerfile#L25), or equivalent.
 
 ## Prerequisites
 
 * JupyterLab
 * Jupyterlab nbserverproxy
+* A web-based VNC server
 
 ## Installation
-
-In ./docker/Dockerfile
 
 ```bash
 jupyter labextension install @renku/jupyterlab-vnc
 ```
+
+See ./docker/Dockerfile for an example.
 
 ## TODO
 
@@ -32,11 +32,11 @@ The VNC is started before Jupyterlab starts. It uses nbserverproxy to further pr
 
 Opengl will not work with xvfb, you'll probably need xorg if that's what you want.
 
-Ports and resolution are hardcoded.
+Ports numbers and screen resolution are hardcoded.
 
 ## Development
 
-For a development install (requires npm version 4 or later), do the following in the repository directory:
+For a development environment (requires npm version 4 or later), do the following in the repository directory:
 
 ```bash
 npm install
