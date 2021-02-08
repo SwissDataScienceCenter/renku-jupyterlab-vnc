@@ -1,3 +1,7 @@
+# DEPRECATED
+
+noVNC for Jupyterlab on RENKU has moved to [renku-vnc](https://github.com/SwissDataScienceCenter/renku-vnc)
+
 # renku-jupyterlab-vnc
 
 A JupyterLab extension for VNC.
